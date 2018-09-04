@@ -1,0 +1,48 @@
+version: "3"
+services:
+  service_redis:
+    image: redis:3.2-alpine
+    ports:
+      - "6379:6379"
+    container_name: seed-redis
+  service_mongodb:
+    image: mongo:3.3
+    ports:
+      - "27017:27017"
+    volumes:
+      - ~/omg/docker/mongo:/data/db
+    container_name: seed-mongodb
+  service_zookeeper:
+    image: zookeeper:3.4
+    ports:
+      - "2181:2181"
+      - "2888:2888"
+      - "3888:3888"
+    container_name: seed-zookeeper
+  service_kafka:
+    image: wurstmeister/kafka:latest
+    links:
+      - service_zookeeper:zk
+    volumes:
+      - ~/omg/docker/kafka:/var/run/docker.sock
+    environment:
+      KAFKA_ADVERTISED_HOST_NAME: 10.200.10.1
+      KAFKA_ZOOKEEPER_CONNECT: zk:2181
+      KAFKA_ADVERTISED_PORT: "9092"
+      KAFKA_CREATE_TOPICS: "email:1:1,phone:1:1"
+    ports:
+      - "9092:9092"
+    container_name: seed-kafka
+  service_seed:
+    build: ./seed
+    container_name: seed
+    # volumes:
+    #   - ~/codes/Docker/docker-project-seed/seed/node_modules:/usr/src/app/node_modules
+    links:
+      - service_redis:redis
+      - service_mongodb:mongo
+      - service_zookeeper:zookeeper
+    ports:
+      - "4000:4000"
+
+

@@ -1,0 +1,20 @@
+FROM node:7.9.0
+
+ENV NODE_ENV docker
+
+RUN mkdir -p /usr/src/app
+WORKDIR /usr/src/app
+
+COPY package.json /usr/src/app
+COPY npm-shrinkwrap.json /usr/src/app
+
+# RUN mkdir node_modules
+
+RUN npm install -g cnpm --registry=https://registry.npm.taobao.org
+
+RUN cnpm install
+
+COPY . /usr/src/app
+
+EXPOSE 4000
+CMD ["npm", "start"]

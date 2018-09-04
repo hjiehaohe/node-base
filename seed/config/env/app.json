@@ -1,0 +1,26 @@
+{
+    "db": {
+        "host": "10.200.10.1",
+        "user": "pino",
+        "password": "pino",
+        "database": "seed",
+        "driver": "mysql"
+    },
+    "mongo": {
+        "hosts": ["10.200.10.1:27017"],
+        "database": "seed"
+    },
+    "redis": {
+        "port": 6379,
+        "host": "10.200.10.1",
+        "family": 4,
+        "db": 0
+    },
+    "kafka": {
+        "zookeeper": "10.200.10.1:2181/"
+    },
+    "secret": "Great minds think alike",
+    "user": {
+        "confirm": true
+    }
+}
